@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./react/babel.min.js" charset="utf-8"></script>
+  <script src="./react/react.development.js" charset="utf-8"></script>
+  <script src="./react/react-dom.development.js" charset="utf-8"></script>
+  <title>navbar</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+
+    function Navbar() {
+
+      const [ screenWidth, setSCreenWidth ] = React.useState(true);
+
+      const chekScreen = () => {
+        window.innerWidth < 769 ?  setSCreenWidth(false) : setSCreenWidth(true);
+      };
+
+      React.useEffect(() => {
+        window.addEventListener("resize", chekScreen);
+        chekScreen();
+        return () => {
+          window.removeEventListener("resize", chekScreen);
+        };
+      },[]);
+
+      return (
+        <header className="main-header">
+          <div className="header-container">
+            <div className="logo">
+              <h1 className="site-title">navbar</h1>
+            </div>
+            {screenWidth ?
+               <nav className="main-navbar">
+                  <ul className="nav-list">
+                    <NavLinks />
+                  </ul>
+                </nav> :
+                <Mobile title={"navbar"} />}
+          </div>
+        </header>
+      );
+    }
+
+    function Mobile(props) {
+
+      const [ isToggle, setToggle ] = React.useState(false);
+
+      const handleToggle = () => {
+        setToggle(!isToggle);
+      }
+
+      return (
+        <>
+          <i
+            className={isToggle ? "bi bi-x" : "bi bi-list"}
+            id="menu"
+            onClick={handleToggle}
+          ></i>
+          <nav className={isToggle ? "mobile-nav active" : "mobile-nav"}>
+            <ul className="nav-list">
+              <h1>{props.title}</h1>
+              <NavLinks />
+            </ul>
+          </nav>
+        </>
+      );
+    }
+
+    function NavLinks() {
+
+      const navLinks = [
+        {title: "home", key: 1, path: "#"},
+        {title: "products", key: 2, path: "#products"},
+        {title: "services", key: 3, path: "#services"},
+        {title: "contact us", key: 4, path: "#contact-us"},
+        {title: "about us", key: 5, path: "#about-us"}
+      ]
+
+      return (
+        <>
+          {navLinks.map(link => (
+            <li className="nav-items" key={link.key}>
+              <a href={link.path}>{link.title}</a>
+            </li>
+            ))}
+        </>
+      );
+    }
+
+    ReactDOM.render(<Navbar />, document.getElementById('root'));
+
+  </script>
+
+</body>
+</html>
